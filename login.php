@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($password_error == "" && $email_error == "" ){ 
 				
 		
-			loginUser();			
+			loginUser($email, $password);			
 				
 				
 				
@@ -75,9 +75,9 @@ if(isset($_POST["create"])){
 		
 		if($create_password_error == "" && $create_email_error == "" ){
 					
-				echo "Olete registreerunud! Teie E-post on ".$create_email." ja parool on ".$create_password;
 				
-				createUser();
+				
+				createUser($create_email, $create_password);
 				 
 				
 				

@@ -1,24 +1,35 @@
 <?php
 
-// functions.php
-// siia tulevad funktsioonid mis on seotud andmebaasiga
-
 // loome AB ühenduse
-require_once("../config.php");
+require_once("../config_global.php");
 $database = "if15_kiira_3";
-$mysqli = new mysqli($servername, $username, $password, $database);
+
+
+
+
+
 
 // võtab andmed ja sisestab ABsse
-function createUser(){
+function createUser($create_email, $create_password){
 	
+			// Global muutujad, et kätte saada config failist andmed
+			$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
+			
 			$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUES(?,?)");
 			$stmt->bind_param("ss", $create_email, $create_password);
 			$stmt->execute();
+			
+			echo "Olete registreerunud! Teie E-post on ".$create_email." ja parool on ".$create_password;
+			
 			$stmt->close();
+			
+			$mysqli->close();
 	
 }
 
-function loginUser(){
+function loginUser($email, $password){
+			
+			$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 			
 			$stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
 			$stmt->bind_result($id_from_db, $email_from_db);
@@ -34,10 +45,11 @@ function loginUser(){
 					  
 					  
 			$stmt->close();
+			
+			$mysqli->close();
 }
 
-// paneme ühenduse kinni
-$mysqli->close();
+
 
 ?>
 
