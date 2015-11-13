@@ -1,20 +1,8 @@
 <?php
 
 
-require_once("../config.php");
-$database = "if15_kiira_3";
-
-
-//1.loome ühenduse
-$mysqli = new mysqli($servername, $username, $password, $database);
-
-	//ühenduse kontrollimine
-	if($mysqli->connect_error){
-		die("connect error ".mysqli_connect_error());
-		}
-	echo "Ühenduse loomine õnnestus. ";
-
-
+// kõik funktsioonid kus tegeleme ABga
+require_once("functions.php");
 
 
 // muutujad errorite jaoks
@@ -52,28 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	  
 		if($password_error == "" && $email_error == "" ){ 
-				//echo "Kasutaja ".$email." logitakse sisse";
-		
-			//3. käsklus, et saada sisestatud emailile ja passwordile vastavad  andmed abst kätte	
-			$stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");		
 				
-			//4. abst tulnud muutujad, muutujatesse pannakse andmed samas järjekorras kui SELECT lauses
-			$stmt->bind_result($id_from_db, $email_from_db);
-			
-			//2. Asendab SELECT lauses küsimärgid sisestatud emaili ja passwordiga.
-			$stmt->bind_param("ss", $email, $password);
-			$stmt->execute();
-
-				//5. kontrollib kas andmebaasis olid samad väärtused mis sisestati. Fetch täidab bind result käsklusega määratud muutujad andmebaasist tulnud andmetega.
-				if($stmt->fetch()){
-					//kasutaja email ja parool on õiged
-					echo "Kasutaja ".$id_from_db." logis sisse";
-				}else{
-					echo "Teie poolt sisestatud andmed ei ole õiged!";
-					  }
-					  
-					  // ühenduse sulgemine. Mõne aja pärast sulgeb ennast ise kuid vabade andmebaasiühenduste lemiit võib selle aja jooksul otsa saada. 
-					  $stmt->close();			
+		
+			loginUser();			
 				
 				
 				
@@ -106,14 +75,11 @@ if(isset($_POST["create"])){
 		
 		if($create_password_error == "" && $create_email_error == "" ){
 					
-					
-					$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUES(?,?)");
-					$stmt->bind_param("ss", $create_email, $create_password);
-					$stmt->execute();	
-					
-					echo "Olete registreerunud! Teie E-post on ".$create_email." ja parool on ".$create_password;
+				echo "Olete registreerunud! Teie E-post on ".$create_email." ja parool on ".$create_password;
+				
+				createUser();
 				 
-				 $stmt->close();
+				
 				
 				}
 				
