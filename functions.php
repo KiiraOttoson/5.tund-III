@@ -62,6 +62,11 @@ function loginUser($email, $password){
 			$mysqli->close();
 }
 
+function addCarPlate(){
+	
+	
+}
+
 
 
 ?>
