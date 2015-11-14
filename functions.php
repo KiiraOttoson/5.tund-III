@@ -4,6 +4,10 @@
 require_once("../config_global.php");
 $database = "if15_kiira_3";
 
+//tekitatakse sessioon, mida hoitakse serveris,
+//kõik sessiooni muutujad on kättesaadavad kuni viimase brauseriakna sulgemiseni
+session_start();
+
 
 
 
@@ -39,6 +43,15 @@ function loginUser($email, $password){
 			if($stmt->fetch()){
 					
 					echo "Kasutaja ".$id_from_db." logis sisse";
+					
+					//tekitan sessiooni muutujad
+					$_SESSION["logged_in_user_id"]= $id_from_db;
+					$_SESSION["logged_in_user_email"]= $email_from_db;
+					
+					//suunan data.php lehele
+					header("Location: data");
+					
+					
 				}else{
 					echo "Teie poolt sisestatud andmed ei ole õiged!";
 					  }
